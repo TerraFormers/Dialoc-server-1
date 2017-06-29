@@ -13,9 +13,10 @@ function isValidId(req, res, next) {
 }
 
 function validUser(user) {
+  const hasName = typeof user.name == "string";
   const hasEmail = typeof user.email == "string";
   const hasPass = typeof user.password == "string";
-  return hasEmail && hasPass;
+  return hasName && hasEmail && hasPass;
 }
 
 function allowAccess(req, res, next) {

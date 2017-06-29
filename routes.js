@@ -13,10 +13,9 @@ function isValidId(req, res, next) {
 }
 
 function validUser(user) {
-  const hasName = typeof user.name == "string";
   const hasEmail = typeof user.email == "string";
   const hasPass = typeof user.password == "string";
-  return hasName && hasEmail && hasPass;
+  return hasEmail && hasPass;
 }
 
 router.get("/users", function(req, res) {
@@ -96,7 +95,7 @@ router.get("/location", function(req, res) {
   queries.getAllLocation().then(locations => res.json(locations));
 });
 
-router.put("/location", function(req, res){
+router.put("/location", function(req, res) {
   console.log(req.body);
   queries.updateLocation(req.body.rating, req.body.id).then(location => res.json(location));
 });
