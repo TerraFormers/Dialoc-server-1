@@ -53,4 +53,4 @@ Put for update "likes": /location
       "rating" 3    //The new amount of "likes" you want it to have
     }
     
-    
+   
