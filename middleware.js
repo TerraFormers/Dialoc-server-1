@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const token_secret = "french_toast";
 
 function checkTokenSetUser(req, res, next) {
+  console.log(req.params);
   const tokenHeader = req.get("Authorization");
   if (tokenHeader) {
     const token = tokenHeader.split(" ")[1];
@@ -9,8 +10,8 @@ function checkTokenSetUser(req, res, next) {
       if (err) {
         next();
       } else {
-        console.log(decoded);
         req.user = decoded;
+        console.log("req.user", req.user);
         next();
       }
     });
@@ -20,7 +21,9 @@ function checkTokenSetUser(req, res, next) {
 }
 
 function ensureLoggedIn(req, res, next) {
+  console.log(req.params);
   if (req.user) {
+    console.log("here");
     next();
   } else {
     res.status(401);
@@ -29,9 +32,12 @@ function ensureLoggedIn(req, res, next) {
 }
 
 function allowAccess(req, res, next) {
+  console.log("made it");
   if (req.user.id == req.params.id) {
     next();
   } else {
+    console.log(req.user.id);
+    console.log(req.params);
     res.status(401);
     next(new Error("Un-Authorized"));
   }
