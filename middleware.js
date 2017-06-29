@@ -31,20 +31,7 @@ function ensureLoggedIn(req, res, next) {
   }
 }
 
-function allowAccess(req, res, next) {
-  console.log("made it");
-  if (req.user.id == req.params.id) {
-    next();
-  } else {
-    console.log(req.user.id);
-    console.log(req.params);
-    res.status(401);
-    next(new Error("Un-Authorized"));
-  }
-}
-
 module.exports = {
   ensureLoggedIn,
-  allowAccess,
   checkTokenSetUser
 };

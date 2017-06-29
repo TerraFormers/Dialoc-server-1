@@ -19,78 +19,20 @@ function validUser(user) {
   return hasName && hasEmail && hasPass;
 }
 
-router.get("/:id", isValidId, function(req, res) {
+function allowAccess(req, res, next) {
+  console.log("made it");
+  if (req.user.id == req.params.id) {
+    next();
+  } else {
+    console.log(req.user.id);
+    console.log(req.params);
+    res.status(401);
+    next(new Error("Un-Authorized"));
+  }
+}
+
+router.get("/:id", isValidId, allowAccess, function(req, res) {
   queries.getUser(req.params.id).then((user) => res.json(user));
 });
-
-router.post("/signup", function(req, res, next) {
-  if (validUser(req.body)) {
-    queries.getUserByEmail(req.body.email).then((user) => {
-      if (!user) {
-        bcrypt.genSalt(8, function(err, salt) {
-          bcrypt.hash(req.body.password, salt, function(err, hash) {
-            const user = {
-              name: req.body.name,
-              email: req.body.email,
-              password: hash
-            };
-            queries.createUser(user).then((user) => {
-              jwt.sign({
-                id: user[0].id
-              }, token_secret, {
-                expiresIn: "1h"
-              }, (err, token) => {
-                console.log("err", err);
-                console.log("token", token);
-                res.json({
-                  id: user[0].id,
-                  token,
-                  message: "ok"
-                });
-              });
-            });
-          });
-        });
-      } else {
-        next(new Error("Email already in use"));
-      }
-    });
-  } else {
-    next(new Error("Invalid User"));
-  }
-});
-
-router.post("/login", function(req, res, next) {
-  if (validUser(req.body)) {
-    queries.getUserByEmail(req.body.email).then((user) => {
-      if (user) {
-        bcrypt.compare(req.body.password, user.password).then((match) => {
-          if (match) {
-            jwt.sign({
-              id: user.id
-            }, token_secret, {
-              expiresIn: "1h"
-            }, (err, token) => {
-              console.log("err", err);
-              console.log("token", token);
-              res.json({
-                id: user.id,
-                token,
-                message: "logged in"
-              });
-            });
-          } else {
-            next(new Error("Invalid Login"));
-          }
-        });
-      } else {
-        next(new Error("Invalid Login"));
-      }
-    });
-  } else {
-    next(new Error("Invalid Login"));
-  }
-});
-
 
 module.exports = router;
