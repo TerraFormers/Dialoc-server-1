@@ -92,8 +92,13 @@ router.post("/login", function(req, res, next) {
   }
 });
 
-router.get("user/:id/location", isValidId, function(req, res, next) {
-  console.log(req.cookie);
+router.get("/location", function(req, res) {
+  queries.getAllLocation().then(locations => res.json(locations));
+});
+
+router.put("/location", function(req, res){
+  console.log(req.body);
+  queries.updateLocation(req.body.rating, req.body.id).then(location => res.json(location));
 });
 
 module.exports = router;

@@ -35,4 +35,16 @@ router.get("/:id", isValidId, allowAccess, function(req, res) {
   queries.getUser(req.params.id).then((user) => res.json(user));
 });
 
+router.get("/:id/location", isValidId,  allowAccess,function(req, res, next) {
+  queries.getLocationByUser(req.params.id).then((user) => res.json(user));
+});
+
+router.post("/:id/location", isValidId, allowAccess, function(req, res, next) {
+  queries.addLocationByUser(req.body).then((location) => res.json(location));
+});
+
+router.delete("/:id/location", isValidId, allowAccess, function(req, res, next) {
+  queries.deleteLocationByUser(req.body.id).then(() => res.json("deleted"));
+});
+
 module.exports = router;
