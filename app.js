@@ -7,7 +7,7 @@ const middleware = require("./middleware");
 const userRoutes = require("./userRoutes");
 
 var app = express();
-//Some Change
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(bodyParser.json());
@@ -15,7 +15,9 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(cookieParser());
-// app.use(cors());
+app.use(cors({
+  "origin": "*",
+}));
 // app.use(handlebars);
 app.use(middleware.checkTokenSetUser);
 app.use("/", routes);
