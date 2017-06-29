@@ -7,6 +7,9 @@ module.exports = {
   getUser: function(user_id) {
     return knex("user").where("id", user_id).first();
   },
+  getUserByEmail: function(user_email) {
+    return knex("user").where("email", user_email).first();
+  },
   createUser: function(newUser) {
     return knex("user").insert(newUser).returning("*");
   },
