@@ -26,6 +26,6 @@ module.exports = {
     return knex("location");
   },
   updateLocation: function(newRating, local_id) {
-    return knex("location").update("rating", newRating).where("id", local_id);
+    return knex("location").increment("rating", 1).where("id", local_id);
   }
 };
