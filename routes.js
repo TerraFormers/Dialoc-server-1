@@ -97,7 +97,7 @@ router.get("/location", function(req, res) {
 
 router.put("/location", function(req, res) {
   console.log(req.body);
-  queries.updateLocation(req.body.rating, req.body.id).then(location => res.json(location));
+  queries.updateLocation(req.body.id).then(location => res.json(location));
 });
 
 module.exports = router;

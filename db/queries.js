@@ -25,7 +25,7 @@ module.exports = {
   getAllLocation: function() {
     return knex("location");
   },
-  updateLocation: function(newRating, local_id) {
+  updateLocation: function(local_id) {
     return knex("location").increment("rating", 1).where("id", local_id);
   }
 };
