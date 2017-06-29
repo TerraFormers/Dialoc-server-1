@@ -19,8 +19,8 @@ function validUser(user) {
   return hasName && hasEmail && hasPass;
 }
 
-router.get("/users", function(req, res) {
-  queries.getUsers().then((users) => res.json(users));
+router.get("/:id", isValidId, function(req, res) {
+  queries.getUser(req.params.id).then((user) => res.json(user));
 });
 
 router.post("/signup", function(req, res, next) {
@@ -92,8 +92,5 @@ router.post("/login", function(req, res, next) {
   }
 });
 
-router.get("user/:id/location", isValidId, function(req, res, next) {
-  console.log(req.cookie);
-});
 
 module.exports = router;

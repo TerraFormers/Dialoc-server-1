@@ -3,6 +3,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const cors = require('cors');
 const routes = require("./routes");
+const middleware = require("./middleware");
+const userRoutes = require("./userRoutes");
 
 var app = express();
 
@@ -15,8 +17,9 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(cors());
 // app.use(handlebars);
-
+app.use(middleware.checkTokenSetUser);
 app.use("/", routes);
+app.use("/user", middleware.ensureLoggedIn, userRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
