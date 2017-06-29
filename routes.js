@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const queries = require("./db/queries");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const token_secret = "french_toast"
 
 function isValidId(req, res, next) {
   if (!isNaN(req.params.id)) {
@@ -11,9 +13,9 @@ function isValidId(req, res, next) {
 }
 
 function validUser(user) {
-  const hasName = typeof user.name == "string" && user.name.trim() != "";
-  const hasEmail = typeof user.email == "string" && user.genre.trim() != "";
-  const hasPass = typeof user.password == "string" && user.album_name.trim() != "";
+  const hasName = typeof user.name == "string";
+  const hasEmail = typeof user.email == "string";
+  const hasPass = typeof user.password == "string";
   return hasName && hasEmail && hasPass;
 }
 
@@ -25,10 +27,9 @@ router.get("/user/:id", isValidId, function(req, res) {
   queries.getUser(req.params.id).then((user) => res.json(user));
 });
 
-router.post("/user", function(req, res, next) {
+router.post("/signup", function(req, res, next) {
   if (validUser(req.body)) {
     queries.getUserByEmail(req.body.email).then((user) => {
-      res.json(user);
       if (!user) {
         bcrypt.genSalt(8, function(err, salt) {
           bcrypt.hash(req.body.password, salt, function(err, hash) {
@@ -37,10 +38,21 @@ router.post("/user", function(req, res, next) {
               email: req.body.email,
               password: hash
             };
-            queries.createUser(user).then((user) => res.json({
-              user,
-              message: "User has been created"
-            }));
+            queries.createUser(user).then((user) => {
+              jwt.sign({
+                id: user[0].id
+              }, token_secret, {
+                expiresIn: "1h"
+              }, (err, token) => {
+                console.log("err", err);
+                console.log("token", token);
+                res.json({
+                  id: user[0].id,
+                  token,
+                  message: "ok"
+                });
+              });
+            });
           });
         });
       } else {
@@ -58,16 +70,18 @@ router.post("/login", function(req, res, next) {
       if (user) {
         bcrypt.compare(req.body.password, user.password).then((match) => {
           if (match) {
-            const isSecure = req.app.get("env") != "development";
-            res.cookie("user_id", user.id, {
-              httpOnly: true,
-              secure: isSecure,
-              signed: true
-            });
-
-            res.json({
-              user,
-              message: "logged in"
+            jwt.sign({
+              id: user[0].id
+            }, token_secret, {
+              expiresIn: "1h"
+            }, (err, token) => {
+              console.log("err", err);
+              console.log("token", token);
+              res.json({
+                id: user[0].id,
+                token,
+                message: "logged in"
+              });
             });
           } else {
             next(new Error("Invalid Login"));
@@ -81,3 +95,9 @@ router.post("/login", function(req, res, next) {
     next(new Error("Invalid Login"));
   }
 });
+
+router.get("user/:id/location", isValidId, function(req, res, next) {
+  console.log(req.cookie);
+});
+
+module.exports = router;
