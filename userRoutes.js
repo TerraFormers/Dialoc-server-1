@@ -13,10 +13,9 @@ function isValidId(req, res, next) {
 }
 
 function validUser(user) {
-  const hasName = typeof user.name == "string";
   const hasEmail = typeof user.email == "string";
   const hasPass = typeof user.password == "string";
-  return hasName && hasEmail && hasPass;
+  return hasEmail && hasPass;
 }
 
 function allowAccess(req, res, next) {
@@ -35,7 +34,7 @@ router.get("/:id", isValidId, allowAccess, function(req, res) {
   queries.getUser(req.params.id).then((user) => res.json(user));
 });
 
-router.get("/:id/location", isValidId,  allowAccess,function(req, res, next) {
+router.get("/:id/location", isValidId, allowAccess, function(req, res, next) {
   queries.getLocationByUser(req.params.id).then((user) => res.json(user));
 });
 
