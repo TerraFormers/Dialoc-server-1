@@ -15,9 +15,7 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(cookieParser());
-app.use(cors({
-  "origin": "*",
-}));
+app.use(cors());
 // app.use(handlebars);
 app.use(middleware.checkTokenSetUser);
 app.use("/", routes);

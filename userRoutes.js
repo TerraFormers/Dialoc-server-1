@@ -20,7 +20,6 @@ function validUser(user) {
 }
 
 function allowAccess(req, res, next) {
-  console.log("made it");
   if (req.user.id == req.params.id) {
     next();
   } else {
