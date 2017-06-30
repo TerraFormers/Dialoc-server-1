@@ -50,7 +50,6 @@ Put for update "likes": /location<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    Req Body Needs To Have<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      "id": 1       //id of the location NOT USER ID<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      "rating" 3    //The new amount of "likes" you want it to have<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }<br />
     
    
